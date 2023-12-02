@@ -9,7 +9,8 @@ export default {
 		reqUrl.searchParams.append('keyword', decodeURIComponent(parsed.pathname.slice(1)));
 		const filters = parsed.searchParams.getAll('filter');
 		const response = await fetch(reqUrl.href);
-		const list = await extractInfoFromRss(response as any, filters);
+		const text = await response.text();
+		const list = extractInfoFromRss(text, filters);
 		return list.toReversed();
 	},
 	tryParseUrl(url) {

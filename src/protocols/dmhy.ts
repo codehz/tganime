@@ -6,8 +6,10 @@ export default {
 	async fetch(url) {
 		const parsed = new URL(url);
 		const filters = parsed.searchParams.getAll('filter');
-		const response = await fetch(`https://${parsed.hostname}${parsed.pathname}${parsed.search}`);
-		const list = await extractInfoFromRss(response as any, filters);
+		const reqUrl = `https://${parsed.hostname}${parsed.pathname}${parsed.search}`;
+		const response = await fetch(reqUrl);
+		const text = await response.text();
+		const list = extractInfoFromRss(text, filters);
 		return list.toReversed();
 	},
 	tryParseUrl(url) {

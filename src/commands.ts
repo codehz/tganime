@@ -1,10 +1,11 @@
 import escapeHTML from 'escape-html';
-import { guard, isAdmin, isSupergroup, reply } from 'grammy-guard';
+import { guard, isAdmin, reply } from 'grammy-guard';
 import { nanoid } from 'nanoid';
 import { bot } from './bot';
 import { isForum, isPrivateChatOrAdmin } from './filters';
 import { genv } from './global';
 import { isNanoid } from './is-nanoid';
+import { populate } from './populate';
 import protocols from './protocols';
 import { renderSourceListItem } from './render';
 
@@ -55,6 +56,15 @@ bot.command('listall', guard(isPrivateChatOrAdmin), async (ctx) => {
 		try {
 			await ctx.deleteMessage();
 		} catch {}
+});
+
+bot.command(`populate`, guard(isPrivateChatOrAdmin), async (ctx) => {
+	if (!ctx.message) return;
+	if (ctx.chat.type !== 'private')
+		try {
+			await ctx.deleteMessage();
+		} catch {}
+	await populate(ctx.chat.id);
 });
 
 bot.command(`add`, guard(isPrivateChatOrAdmin), async (ctx) => {
@@ -160,4 +170,15 @@ bot.command(`create`, guard(isForum, reply('forum required')), guard(isAdmin), a
 		parse_mode: 'HTML',
 	});
 	await ctx.api.closeForumTopic(chat_id, thread_id);
+});
+
+bot.command(`reset`, guard(isForum, reply('forum required')), guard(isAdmin), async (ctx) => {
+	if (!ctx.message) return;
+	if (ctx.chat.type !== 'private')
+		try {
+			await ctx.deleteMessage();
+		} catch {}
+	await genv.DB.prepare('DELETE FROM sent WHERE chat_id = ? AND thread_id = ?')
+		.bind(ctx.chat.id, ctx.message.message_thread_id ?? 0)
+		.run();
 });

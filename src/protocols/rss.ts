@@ -1,9 +1,8 @@
 import { parseRSS } from '../parser';
 import { AnimeInfo } from './types';
 
-export async function extractInfoFromRss(response: Response, filters: string[] = []) {
-	const text = await response.text();
-	const parsed = parseRSS(text);
+export function extractInfoFromRss(input: string, filters: string[] = []) {
+	const parsed = parseRSS(input);
 	if (!parsed.rss?.channel?.item?.length) return [];
 	const sources = parsed.rss.channel.item;
 	return sources.flatMap((x) => {
@@ -11,7 +10,7 @@ export async function extractInfoFromRss(response: Response, filters: string[] =
 		const magnet = x.enclosure?.$url;
 		if (!magnet) return [];
 		const parsedMagnet = new URL(magnet);
-		const matched = parsedMagnet.searchParams.get('xt')!.match(/urn:btih:(?<btih>[a-z0-9]{40})/);
+		const matched = parsedMagnet.searchParams.get('xt')!.match(/urn:btih:(?<btih>[a-z0-9]+)/i);
 		if (!matched) return [];
 		const btih = matched.groups!.btih;
 		return {
