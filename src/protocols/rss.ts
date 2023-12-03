@@ -35,11 +35,11 @@ export default {
 		const list = extractInfoFromRss(text, filters);
 		return list.toReversed();
 	},
-	async tryParseUrl(url) {
+	async tryParseUrl(url, protocol = 'rss') {
 		const response = await fetch(url);
 		if (response.headers.get('content-type')?.includes('text/xml')) {
 			const parsed = new URL(url);
-			return `rss://${parsed.hostname}${parsed.pathname}${parsed.search}`;
+			return `${protocol}://${parsed.hostname}${parsed.pathname}${parsed.search}`;
 		}
 		let finalURL = '';
 		const transform = new HTMLRewriter()
@@ -54,7 +54,7 @@ export default {
 		await transform.text();
 		if (finalURL) {
 			const parsed = new URL(finalURL);
-			return `rss://${parsed.hostname}${parsed.pathname}${parsed.search}`;
+			return `${protocol}://${parsed.hostname}${parsed.pathname}${parsed.search}`;
 		}
 		return null;
 	},
