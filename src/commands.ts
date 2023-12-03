@@ -84,7 +84,7 @@ bot.command(`add`, guard(isPrivateChatOrAdmin), async (ctx) => {
 		await ctx.reply(`invalid syntax`);
 		return;
 	}
-	const url = resolveProtocolAndUrl(matched.url, matched.protocol);
+	const url = await resolveProtocolAndUrl(matched.url, matched.protocol);
 	if (!url) {
 		await ctx.reply(`invalid url`);
 		return;
@@ -154,7 +154,7 @@ bot.command(`create`, guard(isForum, reply('forum required')), guard(isAdmin), a
 		await ctx.reply(`invalid syntax`);
 		return;
 	}
-	const url = resolveProtocolAndUrl(matched.url, matched.protocol);
+	const url = await resolveProtocolAndUrl(matched.url, matched.protocol);
 	if (!url) {
 		await ctx.reply(`invalid url`);
 		return;

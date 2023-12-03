@@ -12,10 +12,10 @@ export default {
 		const list = extractInfoFromRss(text, filters);
 		return list.toReversed();
 	},
-	tryParseUrl(url) {
+	async tryParseUrl(url) {
 		const parsed = new URL(url);
 		if (parsed.hostname !== 'dmhy.org') return null;
-		if (!parsed.pathname.endsWith('rss.xml')) return null;
-		return `dmhy://${parsed.hostname}${parsed.pathname}${parsed.search}`;
+		if (parsed.pathname.endsWith('/rss.xml')) return `dmhy://${parsed.hostname}${parsed.pathname}${parsed.search}`;
+		return null;
 	},
 } satisfies ProtocolSupport;

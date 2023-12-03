@@ -10,5 +10,5 @@ export type AnimeInfo = {
 export type ProtocolSupport = {
 	name: string;
 	fetch(url: string): Promise<AnimeInfo[]>;
-	tryParseUrl?(url: string): string | null;
+	tryParseUrl?(url: string): Promise<string | null>;
 };
