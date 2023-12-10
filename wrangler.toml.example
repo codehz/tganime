@@ -6,6 +6,12 @@ compatibility_date = "2023-05-18"
 command = "bun run build"
 watch_dir = "src"
 
+[placement]
+mode = "smart"
+
+[limits]
+cpu_ms = 500
+
 # Cron Triggers
 # Docs: https://developers.cloudflare.com/workers/platform/triggers/cron-triggers/
 # Configuration: https://developers.cloudflare.com/workers/wrangler/configuration/#triggers
