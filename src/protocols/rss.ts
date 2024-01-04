@@ -4,8 +4,10 @@ import { ProtocolSupport } from './types';
 
 export function extractInfoFromRss(input: string, filters: string[] = []) {
 	const parsed = parseRSS(input);
-	if (!parsed.rss?.channel?.item?.length) return [];
-	const sources = parsed.rss.channel.item;
+	if (!parsed.rss?.channel?.item) return [];
+	let sources = parsed.rss.channel.item;
+	if (!Array.isArray(sources)) sources = [sources];
+	if (!sources.length) return [];
 	return sources.flatMap((x) => {
 		if (!filters.every((item) => x.title['#text'].includes(item))) return [];
 		const magnet = x.enclosure?.$url;
