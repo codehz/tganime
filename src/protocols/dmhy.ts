@@ -1,6 +1,5 @@
 import rss from './rss';
 import { ProtocolSupport } from './types';
-
 export default {
 	...rss,
 	name: 'dmhy',

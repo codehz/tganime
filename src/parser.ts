@@ -12,17 +12,26 @@ export function parseRSS(input: string) {
 				title: XMLTextNode;
 				link: XMLTextNode;
 				description: XMLTextNode;
-				item: Array<{
-					title: XMLTextNode;
-					link: XMLTextNode;
-					description: XMLTextNode;
-					guid: XMLTextNode;
-					enclosure: {
-						$url: string;
-						$type: string;
-					};
-					pubDate: XMLTextNode;
-				}>;
+				item: Array<
+					| {
+							title: XMLTextNode;
+							link: XMLTextNode;
+							description: XMLTextNode;
+							guid: XMLTextNode;
+							enclosure: {
+								$url: string;
+								$type: string;
+							};
+							pubDate: XMLTextNode;
+					  }
+					| {
+							title: XMLTextNode;
+							link: XMLTextNode;
+							'nyaa:infoHash': XMLTextNode;
+							description: XMLTextNode;
+							pubDate: XMLTextNode;
+					  }
+				>;
 			};
 		};
 	};
